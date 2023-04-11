@@ -20,10 +20,7 @@ app.get('/products/:pid', async (req,res)=> {
     try {
         const productId = Number(req.params.pid)
         const product = await manager.getProductById(productId);
-        if (product = {}){
-            return('Producto no exsitente.')
-        }
-        res.send({product});
+        res.send(product);
     } catch (error) {
         res.send({ error: error.message });
     }

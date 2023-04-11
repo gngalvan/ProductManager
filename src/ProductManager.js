@@ -53,7 +53,7 @@ export default class ProductManager {
 
       if (!product) {
         console.log('Producto no encontrado');
-        return('Producto no encontrado');
+        return({error: "Producto no encontrado"});
       }
       console.log('Producto encontrado:', product); 
       return(product);
