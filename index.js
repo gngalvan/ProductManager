@@ -4,20 +4,20 @@ const manager = new ProductManager();
 
 let productos = await manager.getProducts();
 
-// console.log(productos);
+console.log(productos);
 
-// await manager.addProduct({
-//   title: 'producto prueba',
-//   description: 'Este es un producto prueba',
-//   price: 200,
-//   thumbnail: 'Sin imagen',
-//   code: 'abc123',
-//   stock: 25,
-// });
+await manager.addProduct({
+  title: 'producto prueba2',
+  description: 'Este es un producto prueba2',
+  price: 2300,
+  thumbnail: 'Sin imagen2',
+  code: 'abc12322',
+  stock: 25,
+});
 
-// console.log(productos);
+console.log(productos);
 
-// await manager.getProductById(2);
+await manager.getProductById(2);
 
 
 await manager.updateProduct(1, {
@@ -32,4 +32,3 @@ await manager.updateProduct(1, {
 
 await manager.deleteProduct(1);
 console.log(productos);
-// await manager.getProducts();
