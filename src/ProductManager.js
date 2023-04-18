@@ -22,13 +22,22 @@ export default class ProductManager {
     try {
       const products = await this.getProducts();
 
-      if (product.title && product.description && product.price && product.thumbnail && product.code && product.stock) {
+      if (product.title && typeof product.title === 'string' 
+      && product.description && typeof product.description === 'string' 
+      && product.price && typeof product.price === 'number' 
+      && product.code && typeof product.code === 'string' 
+      && typeof product.status == 'boolean'
+      && (product.status === true || product.status === false) 
+      && product.stock && typeof product.stock === 'number' 
+      && product.category && typeof product.category === 'string') {
         
         if (products.length === 0) {
           product.id = 1;
         } else {
           product.id = products[products.length - 1].id + 1;
         };
+
+        product.status = true;
   
         products.push(product);
   
@@ -36,15 +45,13 @@ export default class ProductManager {
   
         console.log('Producto agregado correctamente');
       } else {
-        console.log('Por favor, ingrese todos los datos correspondientes.')
-      }
-
+        console.log('Por favor, ingrese todos los datos correspondientes.');
+        return { error: 'Por favor, ingrese todos los datos correspondientes.'};
+      };
     } catch (error) {
       console.log('Error al agregar el producto:', error);
-    }
+    };
   };
-
-
 
   getProductById = async (id) => {
     try {
