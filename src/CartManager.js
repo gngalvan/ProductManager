@@ -1,6 +1,29 @@
+import fs from 'fs';
 import ProductManager from './ProductManager.js';
 
+const path = './files/cart.json'
+
 export default class CartManager extends ProductManager {
+
+    addCart = async () => {
+        try{
+            if(fs.existsSync(path)){
+                const data = await fs.promises.readFile(path, 'utf-8');
+                const carts = JSON.parse(data);
+                const cart = {};    
+                if (carts.length === 0) {
+                    cart.id = 1;
+                } else {
+                    cart.id = carts[carts.length - 1].id + 1;
+                };
+                carts.push(cart);
+                await fs.promises.writeFile(path, JSON.stringify(carts, null, '\t'));
+                console.log('Carrito agregado correctamente');          
+            };   
+        } catch (error) {
+            console.log('Error al agregar el carrito:', error);
+        };
+    };
 
     addProductToCart = async (cid, pid) => {
         try {
@@ -29,5 +52,4 @@ export default class CartManager extends ProductManager {
             throw myError
         };
     };
-
 };

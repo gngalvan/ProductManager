@@ -4,13 +4,13 @@ import CartManager from "../CartManager.js";
 
 const cartRouter = Router();
 
-const productManager = new ProductManager();
+// const productManager = new ProductManager();
 const cartManager = new CartManager("../../files/cart.json");
 
 cartRouter.post("/", async (req, res) => {
     try {
-        const element ={ "arrayProducts": [] }
-        const cart = await cartManager.addElement(element);
+        const cart = await cartManager.addCart();
+        cart.products = [];
         res.send(`Carrito creado ID:${cart}`);
     } catch (error) {
         res.send({ error: error.message });
