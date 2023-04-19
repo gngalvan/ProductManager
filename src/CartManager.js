@@ -53,7 +53,7 @@ export default class CartManager extends ProductManager {
             } else {
                 cart.products[productIndex].quantity++;
             };
-            await this.writeFile(JSON.stringify(products))
+            await this.writeFile(JSON.stringify(cart))
             return cid;
         } catch (e) {
             const myError = new Error(`El producto ${pid} no se pudo agregar al carrito ${cid}`);
