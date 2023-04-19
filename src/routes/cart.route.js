@@ -20,7 +20,7 @@ cartRouter.post("/", async (req, res) => {
 cartRouter.get("/:cid", async (req, res) => {
     try {
         const cid = Number(req.params.cid);
-        const cartProduct = await cartManager.getProductById(cid);
+        const cartProduct = await cartManager.getCartById(cid);
         res.send(cartProduct);
     } catch (error) {
         res.send({ error: error.message });

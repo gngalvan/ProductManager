@@ -1,12 +1,22 @@
 [
 	{
-		"title": "prueba",
-		"description": "prueba description",
+		"title": "prueba2232",
+		"description": "prueba description32",
 		"price": 20,
-		"code": "abc",
-		"status": "true",
+		"code": "adddd",
+		"status": true,
 		"stock": 40,
-		"category": "prueba category",
-		"id": 2
+		"category": "prueba category32",
+		"id": 3
+	},
+	{
+		"title": "prueba2232",
+		"description": "prueba description32",
+		"price": 20,
+		"code": "adddd",
+		"status": true,
+		"stock": 40,
+		"category": "prueba category32",
+		"id": 4
 	}
 ]
