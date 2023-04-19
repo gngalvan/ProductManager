@@ -10,7 +10,9 @@ export default class CartManager extends ProductManager {
             if(fs.existsSync(path)){
                 const data = await fs.promises.readFile(path, 'utf-8');
                 const carts = JSON.parse(data);
-                const cart = {};    
+                const cart = {
+                    products: []
+                }    
                 if (carts.length === 0) {
                     cart.id = 1;
                 } else {

@@ -10,7 +10,7 @@ const cartManager = new CartManager("../../files/cart.json");
 cartRouter.post("/", async (req, res) => {
     try {
         const cart = await cartManager.addCart();
-        cart.products = [];
+        // cart.products = [];
         res.send(`Carrito creado ID:${cart}`);
     } catch (error) {
         res.send({ error: error.message });
