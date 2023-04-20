@@ -48,5 +48,15 @@
 		"stock": 40,
 		"category": "prueba category32",
 		"id": 7
+	},
+	{
+		"title": "hola 1",
+		"description": "prueba hola1",
+		"price": 20,
+		"code": "adddd",
+		"status": true,
+		"stock": 42,
+		"category": "prueba hola category",
+		"id": 8
 	}
 ]
