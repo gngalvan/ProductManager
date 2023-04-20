@@ -34,7 +34,7 @@
                 const cart = carts.find((cart) => cart.id === id);    
                 if (!cart) {
                     console.log('Carrito no encontrado');
-                    return({error: "Carrito no encontrado"});
+                    throw new Error(`Carrito no encontrado con ID ${id}`);
                 };
                 console.log('Carrito encontrado:', cart); 
                 return(cart);
@@ -46,13 +46,15 @@
         addProductToCart = async (cid, pid) => {
             try {
                 const cart = await this.getCartById(cid);
-                const productIndex = cart.products.findIndex(e => e.pid === pid);
-                if (productIndex === -1) {
-                    const prod = { "pid": pid, "quantity": 1 };
-                    cart.products.push(prod);
-                } else {
-                    cart.products[productIndex].quantity++;
-                };
+                if (cart) {
+                    const productIndex = cart.products.findIndex(e => e.pid === pid);
+                    if (productIndex === -1) {
+                        const prod = { "pid": pid, "quantity": 1 };
+                        cart.products.push(prod);
+                    } else {
+                        cart.products[productIndex].quantity++;
+                    };
+                };                
                 const data = await fs.promises.readFile(path, 'utf-8');
                 const carts = JSON.parse(data);
                 const cartIndex = carts.findIndex(e => e.id === cid);
@@ -64,9 +66,7 @@
                 return cid;
             } catch (e) {
                 console.log(e);
-                const myError = new Error(`El producto ${pid} no se pudo agregar al carrito ${cid}`);
-                myError.details = { code: 404, message: `El producto ${pid} no se pudo agregar al carrito ${cid}` };
-                throw myError
+                throw e;
             };
         };
     };
