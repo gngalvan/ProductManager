@@ -1,12 +1,12 @@
 [
 	{
-		"title": "prueba2232",
-		"description": "prueba description32",
+		"title": "pdasdasrueba",
+		"description": "prueba cambiando id",
 		"price": 20,
-		"code": "adddd",
-		"status": true,
+		"code": "abc",
+		"status": false,
 		"stock": 40,
-		"category": "prueba category32",
+		"category": "una prueba virtual",
 		"id": 3
 	},
 	{
@@ -18,5 +18,35 @@
 		"stock": 40,
 		"category": "prueba category32",
 		"id": 4
+	},
+	{
+		"title": "pdasdasrueba",
+		"description": "prueba description",
+		"price": 20,
+		"code": "abc",
+		"status": "",
+		"stock": 40,
+		"category": "una prueba",
+		"id": 5
+	},
+	{
+		"title": "prueba",
+		"description": "prueba description",
+		"price": 20,
+		"code": "abc",
+		"status": true,
+		"stock": 40,
+		"category": "prueba category",
+		"id": 6
+	},
+	{
+		"title": "prueba22329994449",
+		"description": "prueba description32",
+		"price": 20,
+		"code": "adddd",
+		"status": true,
+		"stock": 40,
+		"category": "prueba category32",
+		"id": 7
 	}
 ]

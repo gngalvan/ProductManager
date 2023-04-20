@@ -30,7 +30,7 @@ productsRouter.post('/', async (req, res) => {
     try {
         const product = req.body;
         const pushedProduct = await manager.addProduct(product);
-        res.send({ status: 'Agregado', pushedProduct});
+        res.send({status: pushedProduct});
     } catch (error) {
         res.send({error: error.message});
         console.log('Error al agregar el producto:', error);
@@ -42,7 +42,7 @@ productsRouter.put('/:pid', async (req, res) => {
         const productId = Number(req.params.pid)
         const update = req.body;
         const updatedProduct = await manager.updateProduct(productId, update);
-        res.send({ status: 'Actualizado', updatedProduct});
+        res.send({ status:'Actualizado', updatedProduct});     
     } catch (error) {
         res.send({ error: error.message });
     };
