@@ -64,9 +64,9 @@
                 carts[cartIndex].products = cart.products;
                 await fs.promises.writeFile(path, JSON.stringify(carts, null, '\t'));
                 return cid;
-            } catch (e) {
-                console.log(e);
-                throw e;
+            } catch (error) {
+                console.log(error);
+                throw error;
             };
         };
     };
