@@ -9,7 +9,7 @@ let productos = await manager.getProducts();
   await manager.addProduct({
     title: 'producto prueba2',
     description: 'Este es un producto prueba2',
-    price: 2300,
+    price: 2300,  
     thumbnail: 'Sin imagen2',
     code: 'abc12322',
     stock: 25,
