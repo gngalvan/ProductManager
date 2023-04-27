@@ -3,7 +3,7 @@ import ProductManager from '../managers/ProductManager.js';
 
 const productsRouter = Router();
 
-const manager = new ProductManager('../../src/productos.json');
+const manager = new ProductManager('../../files/productos.json');
 
 productsRouter.get('/', async (req, res) => {
     const productsLlimit = Number(req.query.limit)
