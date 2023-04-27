@@ -33,4 +33,10 @@ io.on('connection', async socket => {
     console.log('Nuevo cliente conectado');
 
     socket.emit('products', await productManager.getProducts());
+
+    socket.on('addProd', async (prod) => {
+        prod.thumbnails = [prod.thumbnails];
+        await productManager.addProduct(prod)
+        socket.emit('rendProd', prod);
+    });
 });
