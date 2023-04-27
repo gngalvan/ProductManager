@@ -20,6 +20,7 @@ export default class ProductManager {
 
   addProduct = async (product) => {
     try {
+      console.log(product);
       const products = await this.getProducts();
       product.status = true;
       if (product.title && typeof product.title === 'string' 

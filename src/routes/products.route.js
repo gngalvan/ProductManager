@@ -28,8 +28,10 @@ productsRouter.get('/:pid', async (req, res) => {
 
 productsRouter.post('/', async (req, res) => {
     try {
+        const io = req.app.get('socketio');
         const product = req.body;
         const pushedProduct = await manager.addProduct(product);
+        io.emit('getProducts', )
         res.send({status: pushedProduct});
     } catch (error) {
         res.send({error: error.message});

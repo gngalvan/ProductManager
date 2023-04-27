@@ -10,26 +10,6 @@
 		"id": 3
 	},
 	{
-		"title": "prueba2232",
-		"description": "prueba description32",
-		"price": 20,
-		"code": "adddd",
-		"status": true,
-		"stock": 40,
-		"category": "prueba category32",
-		"id": 4
-	},
-	{
-		"title": "pdasdasrueba",
-		"description": "prueba description",
-		"price": 20,
-		"code": "abc",
-		"status": "",
-		"stock": 40,
-		"category": "una prueba",
-		"id": 5
-	},
-	{
 		"title": "prueba",
 		"description": "prueba description",
 		"price": 20,
@@ -58,5 +38,38 @@
 		"stock": 42,
 		"category": "prueba hola category",
 		"id": 8
+	},
+	{
+		"title": "prueba444",
+		"description": "prueba444",
+		"price": 444,
+		"code": "p444",
+		"status": true,
+		"thumbnails": "prueba444",
+		"stock": 444,
+		"category": "prueba444",
+		"id": 11
+	},
+	{
+		"title": "producto prueba",
+		"description": "prueba",
+		"price": 14,
+		"code": "rr12",
+		"status": true,
+		"thumbnails": "sda",
+		"stock": 17,
+		"category": "dsad",
+		"id": 12
+	},
+	{
+		"title": "title1",
+		"description": "sda",
+		"price": 1111,
+		"code": "1ww",
+		"status": true,
+		"thumbnails": "fassda",
+		"stock": 11,
+		"category": "dasdas",
+		"id": 13
 	}
 ]

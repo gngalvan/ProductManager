@@ -34,9 +34,13 @@ io.on('connection', async socket => {
 
     socket.emit('products', await productManager.getProducts());
 
-    socket.on('addProd', async (prod) => {
-        prod.thumbnails = [prod.thumbnails];
+    socket.on('addProduct', async (prod) => {
         await productManager.addProduct(prod)
         socket.emit('rendProd', prod);
+    });
+
+    socket.on('deleteProduct', async (id) => {
+        console.log(`Producto ID: ${id}`);
+        await productManager.deleteProduct(Number(id));
     });
 });
