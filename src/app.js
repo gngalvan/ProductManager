@@ -5,6 +5,7 @@ import __dirname from './utils.js';
 import productsRoute from './routes/products.route.js'
 import cartsRoute from './routes/cart.route.js'
 import viewsRouter from './routes/views.router.js';
+import messagesRouter from './routes/messages.route.js';
 import Products from './dao/dbManagers/productsDb.js';
 import Messages from './dao/dbManagers/messagesDb.js';
 import mongoose from 'mongoose';
@@ -13,6 +14,7 @@ import mongoose from 'mongoose';
 const app = express();
 
 const productManager = new Products();
+const messageManager = new Messages();
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -25,6 +27,7 @@ app.use(express.urlencoded({extended:true}));
 
 app.use('/api/products/', productsRoute);
 app.use('/api/carts/', cartsRoute);
+app.use('/chat', messagesRouter);
 app.use('/', viewsRouter);
 
 try {

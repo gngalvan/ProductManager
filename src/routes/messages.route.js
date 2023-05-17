@@ -1,12 +1,12 @@
 import { Router } from "express";
-import Messages from "../dao/dbManagers/messagesDb";
+import Messages from "../dao/dbManagers/messagesDb.js";
 
 
 const messagesRouter = Router();
 
 const messagesManager = new Messages();
 
-messagesRouter.get("/", async (req, res) => {
+messagesRouter.get('/', async (req, res) => {
     const messages = await messagesManager.getAll();
     res.render('chat', {messages})
 });
@@ -23,3 +23,5 @@ messagesRouter.post("/", async (req, res) => {
         res.status(500).send({ status: 'error', error});
     };
 });
+
+export default messagesRouter;
