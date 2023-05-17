@@ -16,7 +16,7 @@ viewsRouter.get('/', async (req, res) => {
 });
 
 viewsRouter.get("/realtimeproducts", async (req, res) => {
-    await productsManager.getAll() ;
+    await productManager.getAll() ;
     res.render('realTimeProducts')
 });
 

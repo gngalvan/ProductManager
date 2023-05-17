@@ -40,7 +40,7 @@ export const io = new Server(server);
 io.on('connection', async socket => {
     console.log('Nuevo cliente conectado');
 
-    socket.emit('products', await productManager.getProducts());
+    socket.emit('products', await productManager.getAll());
 
     socket.on('addProduct', async (prod) => {
         await productManager.addProduct(prod)
