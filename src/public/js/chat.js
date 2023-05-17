@@ -1,34 +1,32 @@
 const socket = io();
 
-let user;
-const chatBox = document.getElementById('chatBox');
 
-Swal.fire({
-  title: 'Identificate',
-  input: 'text',
-  text: 'Ingresa tu email',
-  inputValidator: (value) => {
-    return !value && 'Necesitas ingresar un mail para poder chatear'
-  },
-  allowOutsideClick: false,
-  allowEscapeKey: false
-}).then(result => {
-  user = result.value;
+function generateNewMessage(message) {
+  return `<div class="message">
+  <p class="title">${message.email}</p>
+  <p class="description">${message.message}</p>
+  <p class="time">${message.timestamp}</p>
+  </div>`;
+};
+const newmessage = document.querySelector('#newmessage');
+
+newmessage.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
+  const newmsg = {
+    email,
+    message,  
+
+  }
+  socket.emit("message", newmsg)
+  document.getElementById("message").value = ""
 });
 
-chatBox.addEventListener('keyup', evt => {
-  if(evt.key === 'Enter') {
-    if(chatBox.value.trim().lenght > 0) {
-      socket.emit('message', { user, message: chatBox.value});
-    };
-  };
-});
-
-socket.on('addMessage', data => {
-  let log = document.getElementById('messageLogs');
-  let messages = [];
-  data.forEach(message => {
-    messages += `${message.user} say: ${message.message}<br/>`
-  });
-  log.innerHTML = messages;
+socket.on("addMessage", async (message) => {
+  message.timestamp = new Date()
+  const msg = generateNewMessage(message);
+  document.querySelector("#chat").innerHTML += msg;
+  let chatBox = document.getElementById("chatGeneral"); chatBox.scrollTop = chatBox.scrollHeight;
 })
