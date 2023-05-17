@@ -6,6 +6,7 @@ import productsRoute from './routes/products.route.js'
 import cartsRoute from './routes/cart.route.js'
 import viewsRouter from './routes/views.router.js';
 import Products from './dao/dbManagers/productsDb.js';
+import Messages from './dao/dbManagers/messagesDb.js';
 import mongoose from 'mongoose';
 
 
@@ -50,7 +51,9 @@ io.on('connection', async socket => {
         console.log(`Producto ID: ${id}`);
         await productManager.delete(id);
     });
+
+    socket.on('sendMessage', async (message) => {
+        await messageManager.save(message);
+        socket.emit('addMessage', message);
+    });
 });
-
-
-// TE QUEDASTE HACIENDO LA CONEXION CON LA DB, PERO TE FALTA TERMINAR MESSAGES
