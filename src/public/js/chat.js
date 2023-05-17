@@ -1,38 +1,34 @@
 const socket = io();
 
+const messageTemplate = Handlebars.compile(document.getElementById("messageTemplate").innerHTML);
 
 function generateNewMessage(message) {
-  return  `<div class="message">
-  <p class="title" style="color: rgb(150, 159, 245);">${message.email}</p>
-  <p class="description">${message.message}</p>
-  <p class="time">${message.timestamp}</p>
-</div>`;
+  return messageTemplate({ messages: [message] });
 }
-const newmessage = document.querySelector('#newmessage');
 
-  newmessage.addEventListener('submit',(e)=>{
-    e.preventDefault();
-  
-    const email = document.getElementById("email").value;
-  const message = document.getElementById("message").value;
+const messageInput = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const chatContainer = document.getElementById("chatContainer");
 
-  
+newmessage.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const email = document.getElementById("email").value;
+  const message = messageInput.value;
+
   const newmsg = {
-      email,
-   message,
+    email,
+    message,
+  };
 
-  }
-  socket.emit("MESSAGE_ADDED",newmsg)
-  
+  socket.emit("messageAdded", newmsg);
 
-  document.getElementById("message").value =""
-  // newmessage.reset();
-})
+  messageInput.value = "";
+});
 
-
-socket.on("ADD_MESSAGE_CHAT",async (message)=>{
-  message.timestamp = new Date()
+socket.on("addMessage", (message) => {
+  message.timestamp = new Date();
   const msg = generateNewMessage(message);
-  document.querySelector("#chat").innerHTML += msg; 
-  let chatBox = document.getElementById("chatGeneral"); chatBox.scrollTop = chatBox.scrollHeight;
-})
+  chatContainer.innerHTML += msg;
+  chatContainer.scrollTop = chatContainer.scrollHeight;
+});

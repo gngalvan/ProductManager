@@ -52,7 +52,7 @@ io.on('connection', async socket => {
         await productManager.delete(id);
     });
 
-    socket.on('sendMessage', async (message) => {
+    socket.on('messageAdded', async (message) => {
         await messageManager.save(message);
         socket.emit('addMessage', message);
     });
