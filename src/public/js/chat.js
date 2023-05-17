@@ -1,34 +1,34 @@
 const socket = io();
 
-const messageTemplate = Handlebars.compile(document.getElementById("messageTemplate").innerHTML);
+let user;
+const chatBox = document.getElementById('chatBox');
 
-function generateNewMessage(message) {
-  return messageTemplate({ messages: [message] });
-}
+Swal.fire({
+  title: 'Identificate',
+  input: 'text',
+  text: 'Ingresa tu email',
+  inputValidator: (value) => {
+    return !value && 'Necesitas ingresar un mail para poder chatear'
+  },
+  allowOutsideClick: false,
+  allowEscapeKey: false
+}).then(result => {
+  user = result.value;
+});
 
-const messageInput = document.getElementById("messageInput");
-const sendButton = document.getElementById("sendButton");
-const chatContainer = document.getElementById("chatContainer");
-
-newmessage.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById("email").value;
-  const message = messageInput.value;
-
-  const newmsg = {
-    email,
-    message,
+chatBox.addEventListener('keyup', evt => {
+  if(evt.key === 'Enter') {
+    if(chatBox.value.trim().lenght > 0) {
+      socket.emit('message', { user, message: chatBox.value});
+    };
   };
-
-  socket.emit("messageAdded", newmsg);
-
-  messageInput.value = "";
 });
 
-socket.on("addMessage", (message) => {
-  message.timestamp = new Date();
-  const msg = generateNewMessage(message);
-  chatContainer.innerHTML += msg;
-  chatContainer.scrollTop = chatContainer.scrollHeight;
-});
+socket.on('addMessage', data => {
+  let log = document.getElementById('messageLogs');
+  let messages = [];
+  data.forEach(message => {
+    messages += `${message.user} say: ${message.message}<br/>`
+  });
+  log.innerHTML = messages;
+})

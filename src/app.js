@@ -55,8 +55,8 @@ io.on('connection', async socket => {
         await productManager.delete(id);
     });
 
-    socket.on('messageAdded', async (message) => {
+    socket.on('message', async (message) => {
         await messageManager.save(message);
-        socket.emit('addMessage', message);
+        io.emit('addMessage', message);
     });
 });
