@@ -5,12 +5,14 @@ import __dirname from './utils.js';
 import productsRoute from './routes/products.route.js'
 import cartsRoute from './routes/cart.route.js'
 import viewsRouter from './routes/views.router.js';
-import ProductManager from './managers/ProductManager.js';
+import Products from './dao/dbManagers/productsDb.js';
+import mongoose from 'mongoose';
+// import ProductManager from './managers/ProductManager.js';
 
 
 const app = express();
 
-const productManager = new ProductManager();
+const productManager = new Products();
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -24,6 +26,12 @@ app.use(express.urlencoded({extended:true}));
 app.use('/api/products/', productsRoute);
 app.use('/api/carts/', cartsRoute);
 app.use('/', viewsRouter);
+
+try {
+    await mongoose.connect('mongodb+srv://gonzalongalvan2:2shxwfXi0Bbt1hF0@cluster0.l7roxtu.mongodb.net/');
+} catch (error) {
+    console.log(error);
+}
 
 const server = app.listen(8080, () => console.log("Listening on port 8080"));
 
@@ -44,3 +52,6 @@ io.on('connection', async socket => {
         await productManager.deleteProduct(Number(id));
     });
 });
+
+
+// TE QUEDASTE HACIENDO LA CONEXION CON LA DB, PERO TE FALTA TERMINAR MESSAGES

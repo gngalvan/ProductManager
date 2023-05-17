@@ -1,16 +1,32 @@
 import { Router } from 'express';
-import ProductManager from '../managers/ProductManager.js';
+// import ProductManager from '../managers/ProductManager.js';
+import Products from '../dao/dbManagers/productsDb.js';
 
-const productManager = new ProductManager('../../fies/productos.json');
+const productManager = new Products();
 
 const viewsRouter = Router();
 
 viewsRouter.get('/', async (req, res) => {
-    const products = await productManager.getProducts();
-    res.render('home', {products});
+    try{
+        const products = await productManager.getAll();
+        res.render('home', {products});
+    } catch (error) {
+        res.status(500).send({ status: 'error', error});
+    };
 });
 
-viewsRouter.get('/realtimeproducts', (req, res) => {
+viewsRouter.get("/realtimeproducts", async (req, res) => {
+    await productsManager.getAll() ;
+    res.render('realTimeProducts')
+});
+
+// viewsRouter.get('/', async (req, res) => {
+//     const products = await productManager.getProducts();
+//     res.render('home', {products});
+// });
+
+viewsRouter.get('/realtimeproducts', async (req, res) => {
+    await productManager.getAll();
     res.render('realTimeProducts');
 });
 

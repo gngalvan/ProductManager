@@ -15,20 +15,30 @@ export default class Carts {
         return result;
     };
 
-    addProductToCart = async (cartId, productId) =>{
-        const cart = await cartsModel.findById({_id:cartId});
-        cart.products.push(productId)
-        const response = cart.save()
-        return response;
+    addProductToCart = async (cartId, productId) => {
+        const cart = await cartsModel.findById({_id: cartId});
+        if (cart) {
+            const productIndex = cart.products.findIndex(e => e.productId === productId);
+            if (productIndex === -1) {
+                const prod = { "pid": productId, "quantity": 1};
+                cart.products.push(prod);
+            } else {
+                cart.products[productIndex].quantity++;
+            };
+        } else {
+            return 'Carrito inexistente'
+        };
+        await cart.save();
+        return cartId;
     };
 
     update = async (id, product) => {
-        const resultUpd = await cartsModel.update({_id:id}, {$set:product});
+        const resultUpd = await cartsModel.update({_id: id}, {$setproduct});
         return resultUpd;
     };
 
     findCartById = async (cartId) => {
-        const resultCart = await cartsModel.findById({_id:cartId}).lean()
+        const resultCart = await cartsModel.findById({_id: cartId}).lean()
         return resultCart;
     };
 
