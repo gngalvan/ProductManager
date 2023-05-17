@@ -30,7 +30,7 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
         const cid = req.params.cid;
         const pid = req.params.pid;
         const cart = await cartManager.addProductToCart(cid, pid);
-        res.send(`Producto agregado al carrito ID:${cart._id}`);
+        res.send(`Producto agregado al carrito ID:${cid}`);
     } catch (error) {
         res.status(500).send({ status: 'error', error});
     };

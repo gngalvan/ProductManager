@@ -18,9 +18,13 @@ export default class Carts {
     addProductToCart = async (cartId, productId) => {
         const cart = await cartsModel.findById({_id: cartId});
         if (cart) {
-            const productIndex = cart.products.findIndex(e => e.productId === productId);
+            const productIndex = cart.products.findIndex(product => product.productId === productId);
+            console.log(productIndex)
             if (productIndex === -1) {
-                const prod = { "pid": productId, "quantity": 1};
+                const prod = { 
+                    "pid": productId, 
+                    "quantity": 1
+                };
                 cart.products.push(prod);
             } else {
                 cart.products[productIndex].quantity++;

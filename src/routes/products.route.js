@@ -2,21 +2,21 @@ import { Router } from 'express';
 // import ProductManager from '../dao/fileManagers/ProductManager.js';
 import Products from '../dao/dbManagers/productsDb.js';
 
-
 const productsRouter = Router();
 
 const manager = new Products();
 
-// productsRouter.get('/', async (req, res) => {
-//     const productsLlimit = Number(req.query.limit)
-//     const products = await manager.getProducts();
-//     console.table(products);
-//     if (productsLlimit) {
-//         res.send(products.slice(0, productsLlimit));
-//     } else {
-//         res.send(products);
-//     };  
-// });
+
+productsRouter.get('/', async (req, res) => {
+    const productsLlimit = req.query.limit;
+    const products = await manager.getAll();
+    console.table(products);
+    if (productsLlimit) {
+        res.send(products.slice(0, productsLlimit));
+    } else {
+        res.send(products);
+    };  
+});
 
 productsRouter.get('/:pid', async (req, res) => {
     try {

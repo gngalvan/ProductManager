@@ -12,8 +12,8 @@ export default class Products {
         const result = await productsModel.create(product);
         return result;
     };
-    findProductById = async (cartId) => {
-        const resultCart = await cartsModel.findById({_id:cartId}).lean()
+    findProductById = async (id) => {
+        const resultCart = await productsModel.findById({_id: id}).lean()
         return resultCart;
     };
     update = async (id, productUpd) => {

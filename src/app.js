@@ -7,7 +7,6 @@ import cartsRoute from './routes/cart.route.js'
 import viewsRouter from './routes/views.router.js';
 import Products from './dao/dbManagers/productsDb.js';
 import mongoose from 'mongoose';
-// import ProductManager from './managers/ProductManager.js';
 
 
 const app = express();
@@ -43,13 +42,13 @@ io.on('connection', async socket => {
     socket.emit('products', await productManager.getAll());
 
     socket.on('addProduct', async (prod) => {
-        await productManager.addProduct(prod)
+        await productManager.save(prod)
         socket.emit('rendProd', prod);
     });
 
     socket.on('deleteProduct', async (id) => {
         console.log(`Producto ID: ${id}`);
-        await productManager.deleteProduct(Number(id));
+        await productManager.delete(id);
     });
 });
 
