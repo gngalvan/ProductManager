@@ -28,6 +28,8 @@ export default class Carts {
                 cart.products.push(prod);
             } else {
                 cart.products[productIndex].quantity = cart.products[productIndex].quantity + 1;
+                const response = await cartsModel.updateOne({ _id: cartId }, { products: cart.products });
+                return response;
             };
             const response = await cart.save();
             return response;
