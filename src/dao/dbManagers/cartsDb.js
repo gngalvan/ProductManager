@@ -27,18 +27,15 @@ export default class Carts {
                 };
                 cart.products.push(prod);
             } else {
-                console.log('quantity', cart.products[productIndex].quantity);
                 cart.products[productIndex].quantity = cart.products[productIndex].quantity + 1;
-                console.log('new quantity:', cart.products[productIndex].quantity);
-                console.log('cart before save:', cart);
             };
+            const response = await cart.save();
+            return response;
+            
         } else {
             console.log('carrito intexistente', cart);
             return 'Carrito inexistente'
         };
-        await cart.save();
-        console.log('cart after save:', cart);
-        return cartId;
     };
 
     update = async (id, product) => {
