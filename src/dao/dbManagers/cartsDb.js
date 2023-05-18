@@ -18,7 +18,7 @@ export default class Carts {
     addProductToCart = async (cartId, productId) => {
         const cart = await cartsModel.findById({_id: cartId});
         if (cart) {
-            const productIndex = cart.products.findIndex(product => product.productId === productId);
+            const productIndex = cart.products.findIndex(product => product.pid === productId);
             console.log(productIndex)
             if (productIndex === -1) {
                 const prod = { 
@@ -27,12 +27,17 @@ export default class Carts {
                 };
                 cart.products.push(prod);
             } else {
-                cart.products[productIndex].quantity++;
+                console.log('quantity', cart.products[productIndex].quantity);
+                cart.products[productIndex].quantity = cart.products[productIndex].quantity + 1;
+                console.log('new quantity:', cart.products[productIndex].quantity);
+                console.log('cart before save:', cart);
             };
         } else {
+            console.log('carrito intexistente', cart);
             return 'Carrito inexistente'
         };
         await cart.save();
+        console.log('cart after save:', cart);
         return cartId;
     };
 
