@@ -41,7 +41,7 @@ export default class Carts {
     };
 
     update = async (id, product) => {
-        const resultUpd = await cartsModel.update({_id: id}, {$setproduct});
+        const resultUpd = await cartsModel.updateOne({_id: id}, {$setproduct});
         return resultUpd;
     };
 
