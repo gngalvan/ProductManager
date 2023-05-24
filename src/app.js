@@ -57,6 +57,6 @@ io.on('connection', async socket => {
 
     socket.on('message', async (message) => {
         await messageManager.save(message);
-        io.emit('addMessage', message);
+        socket.broadcast.emit('addMessage', message);
     });
 });

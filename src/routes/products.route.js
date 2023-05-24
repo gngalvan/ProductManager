@@ -7,16 +7,14 @@ const productsRouter = Router();
 const manager = new Products();
 
 
-productsRouter.get('/', async (req, res) => {
-    const productsLlimit = req.query.limit;
-    const products = await manager.getAll();
-    console.table(products);
-    if (productsLlimit) {
-        res.send(products.slice(0, productsLlimit));
-    } else {
-        res.send(products);
-    };  
-});
+// productsRouter.get('/', async (req, res) => {
+//     const { limit = 10, page = 1, sort, ...query } = req.query;
+
+//     const products = await manager.getAll(limit, page, sort, query);
+//     console.table(products);
+
+//     res.render('home', {products});
+// });
 
 productsRouter.get('/:pid', async (req, res) => {
     try {
