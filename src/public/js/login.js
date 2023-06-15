@@ -22,7 +22,7 @@ loginForm.addEventListener('submit', async (e)=>{
         });
         
         let response = await loginFetch.json();
-        if (!response.autorizated) {
+        if (response.status != 'success') {
           panelLogin.textContent = "Credenciales Incorrectas";
         } else {
           window.location.href = '/products';

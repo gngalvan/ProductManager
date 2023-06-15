@@ -1,62 +1,90 @@
 import express from 'express';
-import handlebars from 'express-handlebars';
-import { Server } from 'socket.io';
+import productsRouter from './routes/products.js'
+import cartsRouter from './routes/carts.js';
+import messagesRouter from './routes/messages.js'
+import sessionsRouter from './routes/sessions.js';
+import sessionViewsRouter from './routes/sessionsViews.js';
+import handlebars  from 'express-handlebars';
 import __dirname from './utils.js';
-import productsRoute from './routes/products.route.js'
-import cartsRoute from './routes/cart.route.js'
-import viewsRouter from './routes/views.router.js';
-import messagesRouter from './routes/messages.route.js';
-import Products from './dao/dbManagers/productsDb.js';
-import Messages from './dao/dbManagers/messagesDb.js';
+import {Server as HTTPServer} from 'http'
+import {Server as SocketServer} from 'socket.io'
+import FileManager from './dao/fileManagers/FileManager.js';
+import Products from './dao/dbManagers/products.js';
+import Messages from './dao/dbManagers/messages.js';
 import mongoose from 'mongoose';
+import cookieParser from 'cookie-parser';
+import passport from 'passport';
+import passportInit from './config/passport.config.js';
 
+
+const fileManager = new FileManager("./db/products.json");
+const productsManager = new Products();
+const messagesManager = new Messages();
 
 const app = express();
+const httpServer = new HTTPServer(app);
+export const socketServer = new SocketServer(httpServer);
+export  const io = socketServer; 
 
-const productManager = new Products();
-const messageManager = new Messages();
-
-app.use(express.static(`${__dirname}/public`));
-
-app.engine('handlebars', handlebars.engine());
-app.set('views', `${__dirname}/views`);
-app.set('view engine', 'handlebars');
+try{
+  await mongoose.connect('mongodb+srv://mnmongodb:dbpass07@dbmongoazure.nrqqfgp.mongodb.net/ecommerce')
+  }catch(error){
+  console.log("error conecction db");
+  }
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(express.static(`${__dirname}/public`));
+app.use('/products/realtimeproducts',express.static(`${__dirname}/public`));
+app.use('/products/',express.static(`${__dirname}/public`));
+app.use('/chats',express.static(`${__dirname}/public`));
+app.use('/carts/',express.static(`${__dirname}/public`));
 
-app.use('/api/products/', productsRoute);
-app.use('/api/carts/', cartsRoute);
-app.use('/chat', messagesRouter);
-app.use('/', viewsRouter);
 
-try {
-    await mongoose.connect('mongodb+srv://gonzalongalvan2:2shxwfXi0Bbt1hF0@cluster0.l7roxtu.mongodb.net/');
-} catch (error) {
-    console.log(error);
-}
+app.use(cookieParser())
+passportInit();
+app.use(passport.initialize());
 
-const server = app.listen(8080, () => console.log("Listening on port 8080"));
+app.engine('handlebars',handlebars.engine());
+app.set('views',`${__dirname}/views` ); 
+app.set('view engine',`handlebars` ); 
 
-export const io = new Server(server);
 
-io.on('connection', async socket => {
-    console.log('Nuevo cliente conectado');
+app.use('/products',productsRouter)
+app.use('/carts',cartsRouter)
+app.use('/chat',messagesRouter)
+app.use('/api',sessionsRouter)
+app.use('/',sessionViewsRouter)
 
-    socket.emit('products', await productManager.getAll());
 
-    socket.on('addProduct', async (prod) => {
-        await productManager.save(prod)
-        socket.emit('rendProd', prod);
-    });
 
-    socket.on('deleteProduct', async (id) => {
-        console.log(`Producto ID: ${id}`);
-        await productManager.delete(id);
-    });
 
-    socket.on('message', async (message) => {
-        await messageManager.save(message);
-        socket.broadcast.emit('addMessage', message);
-    });
-});
+socketServer.on('connection',async (socket) =>{
+    console.log("socket conectado");
+
+    socket.emit("SEND_PRODUCTS",await productsManager.getAll())
+
+    socket.on("PRODUCT_ADDED",async(obj)=>{
+        obj.thumbnails= [obj.thumbnails];
+       const resultSave = await productsManager.save(obj)
+         socketServer.sockets.emit("ADD_PRODUCT",resultSave)
+      })
+
+      socket.on("PRODUCT_DELETE",async(id)=>{
+        await productsManager.delete(id);
+        socketServer.sockets.emit("PRODUCT_DELETED",id)
+      })
+
+
+      socket.on("MESSAGE_ADDED",async(message)=>{
+
+await messagesManager.save(message);
+socketServer.sockets.emit("ADD_MESSAGE_CHAT",message)
+      })
+})
+
+const PORT = process.env.PORT || 8080;
+
+httpServer.listen(PORT,()=>{
+    console.log("Express Server listening on PORT 8080")
+})  

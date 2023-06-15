@@ -1,7 +1,7 @@
 const registerForm = document.getElementById('register');
 
 
-registerForm.addEventListener('submit',(e)=>{
+registerForm.addEventListener('submit',async (e)=>{
     e.preventDefault();
 
     const firstName = document.getElementById('first-name').value;
@@ -16,7 +16,7 @@ registerForm.addEventListener('submit',(e)=>{
         password
     }
 
-    fetch('/api/register', {
+   const rs = await fetch('/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -26,5 +26,13 @@ registerForm.addEventListener('submit',(e)=>{
       .catch(error => {
         console.error(error);
       });
+
+      const response =  await rs.json();
+      if(response.status === 'success'){
+        window.location.href='/products'
+      }else{
+        console.error('Error de Registro')
+      }
+
 registerForm.reset();
 })
