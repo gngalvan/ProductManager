@@ -1,36 +1,33 @@
 import express from 'express';
-import productsRouter from './routes/products.js'
-import cartsRouter from './routes/carts.js';
 import messagesRouter from './routes/messages.js'
-import sessionsRouter from './routes/sessions.js';
-import sessionViewsRouter from './routes/sessionsViews.js';
+import SessionsRouter from './routes/sessions.js';
+import SessionsViews from './routes/sessionViews.js';
 import handlebars  from 'express-handlebars';
 import __dirname from './utils.js';
 import {Server as HTTPServer} from 'http'
 import {Server as SocketServer} from 'socket.io'
+import './dao/dbManagers/dbConfig.js'
 import FileManager from './dao/fileManagers/FileManager.js';
 import Products from './dao/dbManagers/products.js';
 import Messages from './dao/dbManagers/messages.js';
-import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import passportInit from './config/passport.config.js';
-
+import ProductsRouter from './routes/products.js'
+import CartsRouter from './routes/carts.js'
 
 const fileManager = new FileManager("./db/products.json");
 const productsManager = new Products();
 const messagesManager = new Messages();
+const productsRouter = new ProductsRouter();
+const cartsRouter = new CartsRouter();
+const sessionsRouter = new SessionsRouter();
+const sessionsViews = new SessionsViews();
 
 const app = express();
 const httpServer = new HTTPServer(app);
 export const socketServer = new SocketServer(httpServer);
 export  const io = socketServer; 
-
-try{
-  await mongoose.connect('mongodb+srv://mnmongodb:dbpass07@dbmongoazure.nrqqfgp.mongodb.net/ecommerce')
-  }catch(error){
-  console.log("error conecction db");
-  }
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -50,11 +47,11 @@ app.set('views',`${__dirname}/views` );
 app.set('view engine',`handlebars` ); 
 
 
-app.use('/products',productsRouter)
-app.use('/carts',cartsRouter)
+app.use('/products', productsRouter.getRouter() )
+app.use('/carts',cartsRouter.getRouter())
 app.use('/chat',messagesRouter)
-app.use('/api',sessionsRouter)
-app.use('/',sessionViewsRouter)
+app.use('/api',sessionsRouter.getRouter())
+app.use('/',sessionsViews.getRouter())
 
 
 
