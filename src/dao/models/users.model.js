@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const userscollection = "users";
+import bcrypt from 'bcrypt';
 
 const usersSchema = new mongoose.Schema({
     
@@ -19,9 +20,9 @@ const usersSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    isAdmin:{
-        type:Boolean,
-        default:false,
+    role:{
+        type:String,
+        default:'USER',
     },
     timestamp:{
         type: Date,
@@ -30,6 +31,7 @@ const usersSchema = new mongoose.Schema({
 
 
 });
+
 
 
 
