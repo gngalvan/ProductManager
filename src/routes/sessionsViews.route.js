@@ -1,24 +1,16 @@
-import { Router } from "express";
-import __dirname from "../utils.js";
-import {publicAccess,privateAccess} from '../middlewares/accessValidator.js'
+import Router from './router.js';
+import {  registrer,login,logout } from '../controllers/sessionsViewsController.js';
 
-const sessionViewsRouter = Router();
+export default class SessionsViews extends Router {
+    init() {
+        
+        this.get("/register",['PUBLIC'],registrer);
 
-sessionViewsRouter.get("/register",publicAccess, async (req, res) => {
-   res.render('register')
- 
-});
+         this.get("/login", ['PUBLIC'],login);
+       
+       
+         this.get("/", ['USER','ADMIN'],logout);
 
-sessionViewsRouter.get("/login", publicAccess, async (req, res) => {
-     res.render('login')
-  });
+    }
 
-
-  sessionViewsRouter.get("/", privateAccess, async (req, res) => {
-     res.render('profile',({
-        user:req.session.user
-     }))
-  });
-
-
-export default sessionViewsRouter;
+}

@@ -1,116 +1,32 @@
-import { Router } from 'express';
-// import ProductManager from '../dao/fileManagers/ProductManager.js';
-import Products from '../dao/dbManagers/productsDb.js';
-
-const productsRouter = Router();
-
-const manager = new Products();
-
-
-// productsRouter.get('/', async (req, res) => {
-//     const { limit = 10, page = 1, sort, ...query } = req.query;
-
-//     const products = await manager.getAll(limit, page, sort, query);
-//     console.table(products);
-
-//     res.render('home', {products});
-// });
-
-import {
-    Router
-} from "express";
+import Router from './router.js';
 import Products from "../dao/dbManagers/products.js";
 import addProductValidator from "../middlewares/addProductValidator.js";
-import __dirname, { authToken } from '../utils.js';
-import { privateAccess } from "../middlewares/accessValidator.js";
-import passport from "passport";
-
+import {
+    getProducts,
+    findProduct,
+    addNewProduct,
+    updateProduct,
+    deleteProduct,
+    renderProductsRealTime
+} from '../controllers/productsController.js';
 const productsManager = new Products();
 
 
-productsRouter.get("/",passport.authenticate('jwt',{session:false}), async (req, res) => {
-const {limit, page,sort,title,price,category,status} = req.query;
-const query = {}
+export default class ProductsRouter extends Router {
+    init() {
+        this.get('/', ['USER', 'ADMIN'], getProducts);
 
-if(title){
-    query.title = title;
-}
-if(price){
-    query.price = parseInt(price);
-}
-if(category){
-    query.category = category;
-}
-if(status){
-    query.status = status;
-}
+        this.get("/product/:id", ['USER', 'ADMIN'], findProduct);
 
-    
-    const products = await productsManager.getAll(limit,page,query,sort) ;
+        this.post("/", ['ADMIN'], addProductValidator, addNewProduct);
 
-    products.user = req.user;
-    res.render('home',{products})
-});
+        this.put("/:id", ['ADMIN'], updateProduct);
 
-productsRouter.get("/product/:id", async (req, res) => {
-    try{
-        const id = req.params.id
-const products = await productsManager.findElementById(id);
-    res.send({status:'success',payload:products})
-    }catch(error){
-        res.status(400).send({status:'error',error})
+        this.delete("/:id", deleteProduct);
+
+        this.get("/realtimeproducts", renderProductsRealTime);
+
     }
-    
-});
 
 
-productsRouter.post("/", addProductValidator, async (req, res) => {
-    try {
-        const element = req.body;
-        const products = await productsManager.save(element);
-        if(products){
-            res.send("Producto Agregado!");
-        }
-    } catch (error) {
-        res.status(400).send().json({
-            error: error
-        });
-    }
-});
-
-
-productsRouter.put("/:id",async (req, res) => {
-    try {
-        const element = req.body;
-        const id = req.params.id
-        const products = await productsManager.update(id,element);
-        res.json({status:'success', payload: products});
-             
-    } catch (error) {
-        res.status(400).json({
-            error: error
-        });
-    }
-});
-
-productsRouter.delete("/:id",async (req, res) => {
-    try {
-        const id = req.params.id
-        const products = await productsManager.delete(id);
-        res.json({status:'success', payload: products});
-             
-    } catch (error) {
-        res.status(400).json({
-            error: error
-        });
-    }
-});
-
-productsRouter.get("/realtimeproducts", async (req, res) => {
-    const products = await productsManager.getAll() ;
-    
-    res.render('realTimeProducts')
-});
-
-
-export default productsRouter;
+}
