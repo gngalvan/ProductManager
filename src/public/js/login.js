@@ -32,5 +32,5 @@ loginForm.addEventListener('submit', async (e)=>{
       } catch (error) {
         console.log("Error al realizar la solicitud:", error);
       }
-   
+      
 })
