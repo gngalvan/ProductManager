@@ -1,10 +1,12 @@
-import { productsModel } from "../models/products.model.js";
+import {
+    productModel
+} from "../models/products.js";
+import ManagerDb from "./managerDb.js";
 
-
-export default class Products {
+export default class Products extends ManagerDb {
     constructor() {
-        console.log("Working products with DB");
-    };
+        super(productModel)
+    }
 
     getAll = async (limit = 10, page = 1, query = '', sortValue) => {
         let filter = {};
@@ -15,58 +17,44 @@ export default class Products {
         };
 
         if (sortValue) {
-            if (sortValue === 'asc') {
-                options.sort = {
-                    price: 1
-                };
-            } else {
-                options.sort = {
-                    price: -1
-                };
+            const sortProducts = sortValue === 'asc' ? 1 : -1;
+            options.sort = {
+                price: sortProducts
             };
-        } else {
-            options.sort = undefined;
-        };
+        }
 
         if (query) {
             filter = {
                 ...query
-            };
-        };
+            }
+        }
 
-        const result = await productsModel.paginate(filter, options);
+        
+
+        const result = await this.model.paginate(filter, options);
         const products = result.docs.map(doc => doc.toObject());
 
         return {
             products,
             pagination: {
-              totalDocs: products.totalDocs,
-              limit: products.limit,
-              totalPages: products.totalPages,
-              page: products.page,
-              pagingCounter: products.pagingCounter,
-              hasPrevPage: products.hasPrevPage,
-              hasNextPage: products.hasNextPage,
-              prevPage: products.prevPage,
-              nextPage: products.nextPage
+              totalDocs: result.totalDocs,
+              limit: result.limit,
+              totalPages: result.totalPages,
+              page: result.page,
+              pagingCounter: result.pagingCounter,
+              hasPrevPage: result.hasPrevPage,
+              hasNextPage: result.hasNextPage,
+              prevPage: result.prevPage,
+              nextPage: result.nextPage
             }
-        };
-    };
+    }
 
-    save = async (product) => {
-        const result = await productsModel.create(product);
-        return result;
-    };
-    findProductById = async (id) => {
-        const resultCart = await productsModel.findById({_id: id}).lean()
-        return resultCart;
-    };
-    update = async (id, productUpd) => {
-        const resultUpd = await productsModel.updateOne({_id: id}, {$set: productUpd});
-        return resultUpd;
-    };
-    delete = async (id) => {
-        const resultDel = await productsModel.deleteOne({_id: id});
-        return resultDel;
-    };
+}
+
+
+findElementById = async (id) => {
+    const resultCart = await this.model.findById({_id:id}).lean();
+    return resultCart
+}
+
 }
