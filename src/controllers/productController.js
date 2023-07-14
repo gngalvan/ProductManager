@@ -1,4 +1,5 @@
 import { getAllProducts,findProductById,addProduct,updateProductById,deleteProductById } from "../service/productsService.js";
+import userDTO from "../dao/DTOs/users.dto.js";
 
 const getProducts = async (req,res) => {
     const {limit, page,sort,title,price,category,status} = req.query;
@@ -19,8 +20,9 @@ const getProducts = async (req,res) => {
     
         
         const products = await getAllProducts(limit,page,query,sort) ;
-    
-        products.user = req.user;
+        const reqUser = req.user
+        const userProfile = new userDTO(reqUser)
+        products.user = userProfile;
         res.render('home',{products})
 
 }

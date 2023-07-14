@@ -47,14 +47,18 @@ export default class Products extends ManagerDb {
               prevPage: result.prevPage,
               nextPage: result.nextPage
             }
+        }
+    }   
+
+    reduceStock = async (idProd,quantityToReduce) => {
+    return  await this.model.updateOne(
+            { _id: idProd },
+            { $inc: { stock: -quantityToReduce } }
+        );
     }
-
-}
-
-
-findElementById = async (id) => {
-    const resultCart = await this.model.findById({_id:id}).lean();
-    return resultCart
-}
-
+    
+    findElementById = async (id) => {
+        const resultCart = await this.model.findById({_id:id}).lean();
+        return resultCart
+    }
 }

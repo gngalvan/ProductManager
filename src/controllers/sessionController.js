@@ -31,7 +31,8 @@ const registerUser = async (req, res) => {
             password
         };
 
-        await saveUser(user)
+        const userGenerated = await saveUser(user)
+        user.role=userGenerated.role;
         const accessToken = generateToken(user);
         res.cookie(
             'coderCookieToken', accessToken, {

@@ -1,4 +1,4 @@
-import { findCartById,createCart,addProdToCart,updateProdQuantityInCart,ClearCartById,deleteProdInCart } from "../service/cartsService.js";
+import { findCartById,createCart,addProdToCart,updateProdQuantityInCart,ClearCartById,deleteProdInCart,createPurchase } from "../service/cartsService.js";
 
 const findCart = async (req, res) => {
     try {
@@ -36,12 +36,30 @@ const createNewCart = async (req, res) => {
     }
 }
 
+
+const createNewPurchase = async (req,res)=>{
+    try {
+        const idCart = req.params.cid;
+        const email = req.user.email;
+        const purchase = await createPurchase(idCart,email);
+        if (purchase) {
+            res.json({
+                status: 'success',
+                payload: purchase
+            });
+        }
+    } catch (error) {
+        res.status(400).json({
+            error: error
+        });
+    }
+}
+
 const addProductToCartById =  async (req, res) => {
     try {
         const idProd = req.params.idprod;
         const id = req.params.id
         const quantity = req.body.quantity
-        console.log(quantity)
 
         const cart = await addProdToCart(id, idProd, quantity);
         if (cart) {
@@ -126,5 +144,5 @@ const deleteProductToCartById =  async (req, res) => {
 
 
 export {
-    findCart,createNewCart,addProductToCartById,updateQuantityProdToCart,clearCartId,deleteProductToCartById
+    findCart,createNewCart,addProductToCartById,updateQuantityProdToCart,clearCartId,deleteProductToCartById,createNewPurchase
 }

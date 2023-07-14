@@ -1,3 +1,5 @@
+import userDTO from "../dao/DTOs/users.dto.js"
+
 const registrer =  async (req, res) => {
     res.render('register')
   
@@ -8,12 +10,14 @@ const registrer =  async (req, res) => {
  }
 
 
-const logout =  async (req, res) => {
+const profile =  async (req, res) => {
+   const reqUser = req.user
+   const userProfile = new userDTO(reqUser)
     res.render('profile',({
-       user:req.user
+       user:userProfile
     }))
  }
 
  export {
-    registrer,login,logout
+    registrer,login,profile
  }
