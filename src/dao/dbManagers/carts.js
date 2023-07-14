@@ -1,5 +1,5 @@
 import { cartsModel } from "../models/carts.js";
-import ManagerDb from "./managerDb.js";
+import ManagerDb from "./managerDB.js";
 
 
 export default class Carts extends ManagerDb {
@@ -18,7 +18,6 @@ export default class Carts extends ManagerDb {
 
 
     addProductToCart = async (idCart, idProd,quantity) => {
-      console.log(quantity)
         const prod = { product: idProd, quantity: quantity };
         const updatedCart = await this.model.findByIdAndUpdate(
           idCart,

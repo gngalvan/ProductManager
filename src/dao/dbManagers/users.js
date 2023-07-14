@@ -1,6 +1,6 @@
 import { usersModel } from "../models/users.js";
 import { comparePassword ,createPasswordHash} from "../../utils.js";
-import ManagerDb from "./managerDb.js";
+import ManagerDb from "./managerDB.js";
 
 export default class Users extends ManagerDb{
     constructor(){

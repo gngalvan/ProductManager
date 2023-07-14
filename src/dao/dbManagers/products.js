@@ -1,7 +1,7 @@
 import {
     productModel
 } from "../models/products.js";
-import ManagerDb from "./managerDb.js";
+import ManagerDb from "./managerDB.js";
 
 export default class Products extends ManagerDb {
     constructor() {
@@ -56,7 +56,7 @@ export default class Products extends ManagerDb {
             { $inc: { stock: -quantityToReduce } }
         );
     }
-    
+
     findElementById = async (id) => {
         const resultCart = await this.model.findById({_id:id}).lean();
         return resultCart

@@ -1,5 +1,5 @@
 import { ticketModel } from "../models/ticket.js";
-import ManagerDb from "./managerDb.js";
+import ManagerDb from "./managerDB.js";
 
 export default class Tickets extends ManagerDb{
     constructor(){
