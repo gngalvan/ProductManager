@@ -6,10 +6,12 @@ import {
 import __dirname, {
     generateToken
 } from "../utils.js";
-
+import CustomError from '../middlewares/errors/customErrors.js';
+import { generateUserExistError } from '../middlewares/errors/info.js';
+import EnumsErrors from '../middlewares/errors/enums.js';
 
 const registerUser = async (req, res) => {
-    try {
+
         const {
             firstName,
             lastName,
@@ -18,49 +20,57 @@ const registerUser = async (req, res) => {
         } = req.body;
 
         const exist = await findUserExist(email)
-
-        if (exist) return res.status(400).send({
-            status: "Error",
-            error: "User already exist",
-        });
-
-        const user = {
-            firstName,
-            lastName,
-            email,
-            password
-        };
-
-        const userGenerated = await saveUser(user)
-        user.role=userGenerated.role;
-        const accessToken = generateToken(user);
-        res.cookie(
-            'coderCookieToken', accessToken, {
-                maxAge: 60 * 60 * 1000,
-                httpOnly: true
+let error;
+        if (!exist) {
+            const user = {
+                firstName,
+                lastName,
+                email,
+                password
+            };
+    
+            const userGenerated = await saveUser(user)
+            user.role=userGenerated.role;
+            const accessToken = generateToken(user);
+            res.cookie(
+                'coderCookieToken', accessToken, {
+                    maxAge: 60 * 60 * 1000,
+                    httpOnly: true
+                }
+            ).send({
+                status: 'success'
+            });
             }
-        ).send({
-            status: 'success'
-        });
-    } catch (error) {
-        console.log(error)
-    }
+            error =   new CustomError(
+                'User already exist',
+                   await generateUserExistError(email),
+             'user Exist',
+                 EnumsErrors.USER_EXIST
+             )
+ 
+        throw error
+      
+    
 }
 
 
 const login = async (req, res) => {
-    try {
+
+        let error;
         const {
             email,
             password
         } = req.body;
 
         const user = await validateLogin(email, password);
-        if (!user)
-            return res.status(400).send({
-                status: "Error",
-                autorizated: false
-            });
+        if (!user){
+            error =   new CustomError(
+                'User or Password invalid',
+                  'retry with another username or password',
+             'Invalid Credentials',
+                 EnumsErrors.INVALID_CREDENTIALS)
+        throw error
+        }
 
 
         const accessToken = generateToken(user);
@@ -74,13 +84,6 @@ const login = async (req, res) => {
             status: 'success'
         });
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            status: 'error',
-            error: error.message
-        });
-    }
 }
 
 
@@ -95,4 +98,4 @@ export {
     registerUser,
     login,
     logout
-}
+}   
