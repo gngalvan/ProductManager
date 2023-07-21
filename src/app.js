@@ -15,6 +15,9 @@ import passport from 'passport';
 import passportInit from './config/passport.config.js';
 import ProductsRouter from './routes/products.js'
 import CartsRouter from './routes/carts.js'
+import mockProductsRouter from './routes/mockProducts.js';
+import compression from 'express-compression';
+import errorHandler from './middlewares/errors/index.js'
 
 const fileManager = new FileManager("./db/products.json");
 const productsManager = new Products();
@@ -23,11 +26,19 @@ const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const sessionsRouter = new SessionsRouter();
 const sessionsViews = new SessionsViews();
+const msgRouter = new messagesRouter();
+const mockingproducts = new mockProductsRouter()
 
 const app = express();
 const httpServer = new HTTPServer(app);
 export const socketServer = new SocketServer(httpServer);
 export  const io = socketServer; 
+
+app.use(compression(
+  {
+    brotli:{enable:true,zlib:{}}
+  }
+))
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -46,12 +57,13 @@ app.engine('handlebars',handlebars.engine());
 app.set('views',`${__dirname}/views` ); 
 app.set('view engine',`handlebars` ); 
 
-
-app.use('/products', productsRouter.getRouter() )
+app.use('/mockingproducts',mockingproducts.getRouter())
+app.use('/products', productsRouter.getRouter())
 app.use('/carts',cartsRouter.getRouter())
-app.use('/chat',messagesRouter)
+app.use('/chat',msgRouter.getRouter())
 app.use('/api',sessionsRouter.getRouter())
 app.use('/',sessionsViews.getRouter())
+app.use(errorHandler);
 
 
 
