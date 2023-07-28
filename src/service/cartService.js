@@ -1,35 +1,79 @@
-import Carts from '../dao/dbManagers/carts.js';
+import {cartsRepository,productsRepository,ticketRepository} from '../repositories/index.js';
+import {createPasswordHash} from '../utils/utils.js'
+import TicketDTO from '../dao/DTOs/ticket.dto.js';
+import PurchaseDTO from '../dao/DTOs/purchaseDTO.js';
+import { sendEmail } from '../config/mailer.config.js';
 
-const carts = new Carts();
 
 
 const findCartById =  async (id) => {
-    return await carts.findElementById(id);
+    return await cartsRepository.findCartById(id);
 }
 
 
 const createCart = async () => {
-    return await carts.save();
+    return await cartsRepository.createCart();
 }
 
+const createPurchase = async (idCart,email)=> {
+    const cart = await cartsRepository.findCartById(idCart);
+    const buyed = [];
+    const notStock = [];
+    let totalAmount = 0;
+
+    
+    for (const prod of cart.products){
+    const productDB = await productsRepository.findProductById(prod.product._id)
+
+    if(productDB.stock >= prod.quantity){
+        buyed.push({
+            title: prod.product.title,
+            price: prod.product.price,
+            quantity: prod.quantity
+            })
+        await productsRepository.reduceStock(productDB._id,prod.quantity)
+        await cartsRepository.deleteProdInCart(idCart,productDB._id)
+        totalAmount+=prod.product.price*prod.quantity;
+        
+    }else{
+        notStock.push(prod.product._id)
+    }
+   
+};
+
+let codeUniqe = email;
+const currentDate = new Date().toLocaleDateString();
+const concatenatedString = codeUniqe.concat(currentDate);
+const code = await createPasswordHash(concatenatedString);
+const purchase = new PurchaseDTO(code, totalAmount, email);
+
+const GeneratePuchase = await ticketRepository.saveTicket(purchase);
+
+const ticket = new TicketDTO(GeneratePuchase, buyed, notStock);
+
+const emailSend =  ticket.getEmail();
+await sendEmail(emailSend);
+
+return  ticket
+}
 
 const addProdToCart = async (idCart, idProd,quantity) =>{
-    return await carts.addProductToCart(idCart, idProd,quantity)
+    return await cartsRepository.addProdToCart(idCart, idProd,quantity)
 }
 
 const updateProdQuantityInCart = async(idCart, pid,quantity) => {
-    return await carts.updateQuantityProdInCart(idCart, pid,quantity);
+    return await cartsRepository.updateProdQuantityInCart(idCart, pid,quantity);
 }
 
 
 const ClearCartById = async (idCart) => {
-    return await carts.clearCart(idCart);
+    return await cartsRepository.ClearCartById(idCart);
 }
 
 const deleteProdInCart = async (idCart,pid) => {
-    return await carts.deleteProductByID(idCart,pid)
+    return await cartsRepository.deleteProdInCart(idCart,pid)
 }
 
 export {
-    findCartById,createCart,addProdToCart,updateProdQuantityInCart,ClearCartById,deleteProdInCart
+    findCartById,createCart,addProdToCart,updateProdQuantityInCart,ClearCartById,deleteProdInCart,createPurchase
 }

@@ -1,4 +1,5 @@
 import config from "../config/config.js";
+import { logger } from "../utils/logger.js";
 
 let Products;
 let Carts;
@@ -9,7 +10,7 @@ const persistence = config.persistence;
 
 switch(persistence) {
     case 'MONGO':
-        console.log('Trabajando con MongoDB');
+        logger.info('Persistence: MongoDB')
         const mongoose = await import("mongoose");
         await mongoose.connect(config.mongoUrl);
         const { default: MongoProducts } = await import('../dao/dbManagers/products.js');
@@ -24,7 +25,7 @@ switch(persistence) {
         Tickets = new MongoTickets();
         break;
     case 'FILE':
-        console.log('Trabajando con FILE');
+        logger.info('Persistence: FILE')
         const { default: fileManager } = await import('./fileManagers/FileManager.js');
         const { default: cartManager } = await import('./fileManagers/CartFileManager.js');
         const { default: userFileManager } = await import('./fileManagers/UserFileManager.js');

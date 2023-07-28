@@ -8,7 +8,7 @@ const PRIVATE_KEY = "GonzaloGalvan";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export const generateToken = (user) => {
+export const generateToken =  (user) => {
   const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "30 minutes" });
   return token;
 };
@@ -33,6 +33,7 @@ export const comparePassword = async (password, hashedPassword) => {
     const match = await bcrypt.compare(password, hashedPassword);
     return match;
   } catch (error) {
+    logger.error(`Error al comparar las contraseñas:", ${error}`)
     throw new Error("Error al comparar las contraseñas");
   }
 };

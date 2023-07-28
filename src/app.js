@@ -3,7 +3,7 @@ import messagesRouter from './routes/messages.js'
 import SessionsRouter from './routes/sessions.js';
 import SessionsViews from './routes/sessionViews.js';
 import handlebars  from 'express-handlebars';
-import __dirname from './utils.js';
+import __dirname from './utils/utils.js';
 import {Server as HTTPServer} from 'http'
 import {Server as SocketServer} from 'socket.io'
 import './dao/dbManagers/dbConfig.js'
@@ -18,6 +18,7 @@ import CartsRouter from './routes/carts.js'
 import mockProductsRouter from './routes/mockProducts.js';
 import compression from 'express-compression';
 import errorHandler from './middlewares/errors/index.js'
+import { addLogger, logger } from './utils/logger.js';
 
 const fileManager = new FileManager("./db/products.json");
 const productsManager = new Products();
@@ -57,6 +58,7 @@ app.engine('handlebars',handlebars.engine());
 app.set('views',`${__dirname}/views` ); 
 app.set('view engine',`handlebars` ); 
 
+app.use(addLogger);
 app.use('/mockingproducts',mockingproducts.getRouter())
 app.use('/products', productsRouter.getRouter())
 app.use('/carts',cartsRouter.getRouter())
@@ -69,7 +71,7 @@ app.use(errorHandler);
 
 
 socketServer.on('connection',async (socket) =>{
-    console.log("socket conectado");
+    logger.info('socket conectado')
 
     socket.emit("SEND_PRODUCTS",await productsManager.getAll())
 
@@ -95,5 +97,5 @@ socketServer.sockets.emit("ADD_MESSAGE_CHAT",message)
 const PORT = process.env.PORT || 8080;
 
 httpServer.listen(PORT,()=>{
-    console.log("Express Server listening on PORT 8080")
+    logger.info(`Express Server listening on PORT ${process.env.PORT || 8080}`)
 })  

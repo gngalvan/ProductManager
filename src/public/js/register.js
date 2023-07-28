@@ -24,7 +24,7 @@ registerForm.addEventListener('submit',async (e)=>{
         body: JSON.stringify(user)
       })
       .catch(error => {
-        console.error(error);
+        logger.error(`Error al realizar la solicitud:", ${error}`)
       });
 
       const response =  await rs.json();

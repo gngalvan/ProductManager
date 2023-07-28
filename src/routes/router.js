@@ -3,7 +3,7 @@ import {
     Router as expressRouter
 } from 'express';
 import passport from "passport";
-
+import { logger } from '../utils/logger.js';
 
 export default class Router {
     constructor() {
@@ -110,8 +110,8 @@ export default class Router {
             try{
                await callback.apply(this, params); 
             }catch(error){
+                    logger.error(`${error}`)
                  throw error
-
             }
             
 
