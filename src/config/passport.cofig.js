@@ -16,6 +16,7 @@ passport.use('jwt',new JWTStrategy({
         const user = jwt_payload.user
         return done(null,user)
     }catch(error){
+        logger.error(`Passport: ${error}`)
         return done(error)
     }
 }))
