@@ -33,6 +33,7 @@ const findProduct = async (req, res) => {
 const products = await findProductById(id);
     res.sendSuccess({status:'success',payload:products})
     }catch(error){
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.sendClientError(error)
     }
     
@@ -48,6 +49,7 @@ const addNewProduct = async (req,res) => {
             res.sendSuccess("Producto Agregado!");
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.sendClientError(error)
     }
 };
@@ -60,6 +62,7 @@ const updateProduct = async (req, res) => {
         const products = await updateProductById(id,element);
         res.sendSuccess({status:'success', payload: products});
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.sendClientError(error)
     }
 }
@@ -71,6 +74,7 @@ const deleteProduct = async (req, res) => {
         const products = await deleteProductById(id);
         res.sendSuccess({status:'success', payload: products});
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.sendClientError(error)
     }
 }

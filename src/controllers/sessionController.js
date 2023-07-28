@@ -5,7 +5,7 @@ import {
 } from '../service/sessionsServices.js';
 import __dirname, {
     generateToken
-} from "../utils.js";
+} from "../utils/utils.js";
 import CustomError from '../middlewares/errors/customErrors.js';
 import { generateUserExistError } from '../middlewares/errors/info.js';
 import EnumsErrors from '../middlewares/errors/enums.js';
@@ -20,7 +20,7 @@ const registerUser = async (req, res) => {
         } = req.body;
 
         const exist = await findUserExist(email)
-let error;
+        let error;
         if (!exist) {
             const user = {
                 firstName,
@@ -43,11 +43,11 @@ let error;
             }
             error =   new CustomError(
                 'User already exist',
-                   await generateUserExistError(email),
-             'user Exist',
+                'user Exist',
+                await generateUserExistError(email),
                  EnumsErrors.USER_EXIST
              )
- 
+
         throw error
       
     
@@ -81,7 +81,8 @@ const login = async (req, res) => {
                 httpOnly: true
             }
         ).send({
-            status: 'success'
+            status: 'success',
+            jwt: accessToken 
         });
 
 }
@@ -98,4 +99,4 @@ export {
     registerUser,
     login,
     logout
-}   
+}

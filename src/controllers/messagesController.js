@@ -9,6 +9,7 @@ const saveMessage = async (req, res) => {
             res.send("Mensaje Agregado!");
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).send().json({
             error: error
         });

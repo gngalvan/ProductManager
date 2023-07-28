@@ -13,6 +13,7 @@ const findCart = async (req, res) => {
             })
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -30,6 +31,7 @@ const createNewCart = async (req, res) => {
             });
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -49,6 +51,7 @@ const createNewPurchase = async (req,res)=>{
             });
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -70,6 +73,7 @@ const addProductToCartById =  async (req, res) => {
         }
 
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -93,6 +97,7 @@ const updateQuantityProdToCart =  async (req, res) => {
         }
 
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -113,6 +118,7 @@ const clearCartId =  async (req, res) => {
             throw cart
         }
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
@@ -135,6 +141,7 @@ const deleteProductToCartById =  async (req, res) => {
         }
 
     } catch (error) {
+        logger.error(`Error al realizar la solicitud:", ${error}`)
         res.status(400).json({
             error: error
         });
