@@ -1,6 +1,5 @@
 export default class ManagerDb {
     constructor(modelManager){
-        console.log("working with MongoDB")
         this.model = modelManager;
     }
 
