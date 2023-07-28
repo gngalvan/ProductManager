@@ -8,6 +8,7 @@ export default class FileManager {
 
   async readFile() {
     return await fs.readFile(this.path, "UTF-8").catch((e) => {
+      logger.error(`Error al realizar la solicitud:", ${error}`)
       if (e.code === "ENOENT") {
         throw "Archivo no encontrado";
       }
@@ -16,6 +17,7 @@ export default class FileManager {
       } else {
         throw "error";
       }
+
     });
   }
 
@@ -47,9 +49,8 @@ export default class FileManager {
 
         contentText.push(product);
         await this.writeFile(JSON.stringify(contentText));
-        console.log("Se ha ingresado el producto correctamente");
     } catch (e) {
-       console.log(e)
+      logger.error(`Error al agregar el elemento:", ${error}`)
 
     }
     return obj.id
@@ -71,6 +72,7 @@ export default class FileManager {
     }
     return product; 
     }catch(error){
+      logger.error(`Error al realizar la solicitud:", ${error}`)
         const myError = new Error('Producto no encontrado');
         myError.details = {code: 404, message: 'Producto no encontrado'};
         throw myError;
@@ -96,6 +98,7 @@ export default class FileManager {
    return `la/s propiedad/es ${props} para el id:${id} fueron actualizadas`;
      
     }catch(e){
+      logger.error(`Error al realizar la solicitud:", ${error}`)
  const myError = new Error(`El elemento ${id} no pudo ser actualizado`);
         myError.details = {code: 404, message: `No fue posible actualizar la/s propiedad/es ${Object.keys(propertys)} para el id:${id}. Verifique que el id exista.`};
         throw myError
@@ -116,6 +119,7 @@ const content = await this.readFile();
      return `El producto id:${id} fue eliminado`;
     }
     }catch(e){
+      logger.error(`Error al realizar la solicitud:", ${error}`)
       const myError = new Error(`El elemento ${id} no pudo ser eliminado`);
         myError.details = {code: 404, message: `No fue posible eliminar  el id:${id}. Verifique que el id exista.`};
         throw myError

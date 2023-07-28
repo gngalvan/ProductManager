@@ -33,6 +33,7 @@ async addProductToCart(cid,pid) {
    return cid;
      
     }catch(e){
+      logger.error(`Error al realizar la solicitud:", ${error}`)
  const myError = new Error(`El producto ${pid} no se pudo agregar al carrito ${cid}`);
         myError.details = {code: 404, message: `El producto ${pid} no se pudo agregar al carrito ${cid}`};
         throw myError

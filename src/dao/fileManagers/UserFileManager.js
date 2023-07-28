@@ -1,5 +1,5 @@
 import FileManager from "./FileManager.js";
-import { comparePassword} from "../../utils.js";
+import { comparePassword} from "../../utils/utils.js";
 
 export default class UserFileManager extends FileManager{
     constructor(path){
