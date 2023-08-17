@@ -19,6 +19,7 @@ export default class Users extends ManagerDb{
         const user = await this.model.findOne({email:emailUser}).lean();
         const resultCompare = await comparePassword(passUser,user.password)
         if(resultCompare){
+          await this.updateLastConecction(emailUser);
           return user 
         }else{
           return 0
@@ -39,5 +40,9 @@ export default class Users extends ManagerDb{
         return user
     }
 
- 
+    updateLastConecction = async (emailUser) => {
+      return this.model.updateOne({email:emailUser}, {
+        $set: { lastConnection: new Date()
+    }})
+  } 
 }

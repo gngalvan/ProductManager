@@ -3,7 +3,7 @@ import messagesRouter from './routes/messages.js'
 import SessionsRouter from './routes/sessions.js';
 import SessionsViews from './routes/sessionViews.js';
 import handlebars  from 'express-handlebars';
-import __dirname from './utils/utils.js';
+import __dirname from './utils/utils.js'
 import {Server as HTTPServer} from 'http'
 import {Server as SocketServer} from 'socket.io'
 import './dao/dbManagers/dbConfig.js'
@@ -19,6 +19,10 @@ import mockProductsRouter from './routes/mockProducts.js';
 import compression from 'express-compression';
 import errorHandler from './middlewares/errors/index.js'
 import { addLogger, logger } from './utils/logger.js';
+import swaggerJsdoc from 'swagger-jsdoc';
+import  swaggerUIexpress from 'swagger-ui-express';
+
+
 
 const fileManager = new FileManager("./db/products.json");
 const productsManager = new Products();
@@ -34,6 +38,20 @@ const app = express();
 const httpServer = new HTTPServer(app);
 export const socketServer = new SocketServer(httpServer);
 export  const io = socketServer; 
+
+const swaggerOptions = {
+  definition:{
+    openapi:'3.0.1',
+    info:{
+      title:'Documentacion del proyecto Ecommerce',
+      description:'API para un ecommerce'
+    }
+  },
+  apis:[`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsdoc(swaggerOptions)
+app.use('/api/docs',swaggerUIexpress.serve,swaggerUIexpress.setup(specs))
 
 app.use(compression(
   {

@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const userscollection = "users";
-import bcrypt from 'bcrypt';
 
 const usersSchema = new mongoose.Schema({
     
@@ -28,11 +27,12 @@ const usersSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    lastConnection:{
+        type:Date,
+        default:Date.now
+    }
 
 
 });
-
-
-
 
 export const usersModel = mongoose.model(userscollection,usersSchema);

@@ -1,12 +1,15 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+import path from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { faker } from '@faker-js/faker/locale/es_MX';
 
 const PRIVATE_KEY = "GonzaloGalvan";
+
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+let __dirname = dirname(__filename);
+__dirname = path.join(__dirname,'..')
 
 export const generateToken =  (user) => {
   const token = jwt.sign({ user }, PRIVATE_KEY, { expiresIn: "30 minutes" });
